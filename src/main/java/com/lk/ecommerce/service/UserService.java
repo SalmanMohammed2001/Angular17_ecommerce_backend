@@ -1,5 +1,7 @@
 package com.lk.ecommerce.service;
 
-public interface UserService {
+import com.lk.ecommerce.dto.core.UserDTO;
 
+public interface UserService {
+    int saveUser(UserDTO userDTO);
 }
