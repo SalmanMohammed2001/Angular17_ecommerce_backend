@@ -80,7 +80,7 @@ public class AuthController {
                             refreshTokenVerify.getUid().getEmail(),
                             "",
                             "",
-                            refreshTokenVerify.getUid().getRole()
+                            refreshTokenVerify.getUid().getRole().name()
                     ));
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseDTO(VarList.Created,"Success", new RefreshTokenDTO(accessToken,refreshTokenRequest.getToken())));

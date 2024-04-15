@@ -27,7 +27,7 @@ public class UserController {
     @PostMapping(value = "/register")
     public ResponseEntity<ResponseDTO> registerUser(@RequestBody @Valid UserDTO userDTO) {
         try {
-            int res = userService.saveUser(userDTO);
+            int res = userService.saveAdmin(userDTO);
             switch (res) {
                 case VarList.Created -> {
                     String token = jwtUtil.generateToken(userDTO);
@@ -52,8 +52,8 @@ public class UserController {
         }
     }
 
+
     @PostMapping(value = "/addNewUser")
-    @PreAuthorize("hasAuthority('DASH_ADMIN') or hasAuthority('DASH_EDITOR')")
     public ResponseEntity<ResponseDTO> addNewUser(@RequestBody @Valid UserDTO userDTO) {
         try {
             int res = userService.saveUser(userDTO);
@@ -77,19 +77,5 @@ public class UserController {
         }
     }
 
-  /*  @GetMapping("/getOneUser")
-    public ResponseEntity<ResponseDTO> searchUser(@RequestAttribute String email) {
-        try {
-            UserDTO userDTO = userService.searchUser(email);
-            if (userDTO == null) {
-                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
-                        .body(new ResponseDTO(VarList.Bad_Gateway, "No Data", null));
-            }
-            return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .body(new ResponseDTO(VarList.Created, "Success", userDTO));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), e));
-        }
-    }*/
+
 }

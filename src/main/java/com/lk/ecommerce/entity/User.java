@@ -1,5 +1,6 @@
 package com.lk.ecommerce.entity;
 
+import com.lk.ecommerce.eums.UserRoles;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,5 +20,5 @@ public class User {
     private String email;
     private String password;
     private String name;
-    private String role;
+    private UserRoles role;
 }
