@@ -14,13 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/auth")
+@CrossOrigin
 public class AuthController {
 
     private final JwtUtil jwtUtil;
@@ -62,7 +60,10 @@ public class AuthController {
         }
 
         AuthDTO authDTO = new AuthDTO();
+        authDTO.setUuid(loadedUser.getUid());
+        authDTO.setName(loadedUser.getName());
         authDTO.setEmail(loadedUser.getEmail());
+        authDTO.setUserRoles(loadedUser.getRole());
         authDTO.setToken(token);
         authDTO.setRefreshToken(refreshToken);
 

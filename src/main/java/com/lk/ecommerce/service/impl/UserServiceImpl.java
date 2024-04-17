@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             //default role is DASH_ADMIN - because profile create against company
-            userDTO.setRole("DASH_ADMIN");
+            userDTO.setRole(UserRoles.ADMIN.name());
             userRepository.save(modelMapper.map(userDTO, User.class));
             return VarList.Created;
         }
@@ -71,16 +71,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             //default role is DASH_ADMIN - because profile create against company
-            userDTO.setRole("DASH_USER");
+            userDTO.setRole(UserRoles.USER.name());
             userRepository.save(modelMapper.map(userDTO, User.class));
             return VarList.Created;
         }
     }
 
-    @PostConstruct
+  //  @PostConstruct
     public  void createAdminAccount(){
         User adminAccount = userRepository.findByRole(UserRoles.ADMIN);
-        if(null==adminAccount){
+        if(adminAccount==null){
             User user =new User();
             user.setName("Admin");
             user.setRole(UserRoles.ADMIN);
