@@ -1,4 +1,4 @@
-package com.lk.ecommerce.controller.admin;
+package com.lk.ecommerce.controller;
 
 import com.lk.ecommerce.dto.core.AuthDTO;
 import com.lk.ecommerce.dto.core.ResponseDTO;
