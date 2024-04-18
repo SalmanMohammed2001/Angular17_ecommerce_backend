@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -12,11 +13,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Order {
+public class Orders {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String orderDescription;
     private Date date;
     private Long amount;
@@ -28,11 +30,16 @@ public class Order {
     private Long discount;
     private UUID trackingId;
 
+
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @JoinColumn(name = "user_id",referencedColumnName = "uid")
     private User user;
 
 
+
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "orders")
+    private List<CartItems> cardItem;
 
 
 
