@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/product")
@@ -74,6 +75,29 @@ public class AdminProductController {
                         .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
             }
 
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
+    @DeleteMapping(value = "/delete",params = {"id"})
+    public ResponseEntity<ResponseDTO>deleteProduct(@RequestParam UUID id){
+        try{
+            int res = adminProductService.delete(id);
+            switch (res) {
+                case VarList.No_Content -> {
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                            .body(new ResponseDTO(VarList.No_Content, "Delete Success", ""));
+                }
+                case VarList.Not_Acceptable -> {
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                            .body(new ResponseDTO(VarList.Not_Acceptable, "Product id can't find", null));
+                }
+                default -> {
+                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                            .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+                }
+            }
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
                     .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));

@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,5 +53,16 @@ public class AdminProductServiceImpl implements AdminProductService {
     public List<ProductDTO> findProductByName(String name) {
         List<Product> byNameContaining = productRepository.findByNameContaining(name);
         return byNameContaining.stream().map(Product::getDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public int delete(UUID uuid) {
+        Optional<Product> optionId = productRepository.findById(uuid);
+        if(optionId.isPresent()){
+            productRepository.deleteById(optionId.get().getId());
+            return VarList.No_Content;
+        }else {
+            return VarList.Not_Acceptable;
+        }
     }
 }
