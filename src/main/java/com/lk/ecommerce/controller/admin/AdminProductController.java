@@ -61,4 +61,22 @@ public class AdminProductController {
                     .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
         }
     }
+
+    @GetMapping("search/{name}")
+    public ResponseEntity<ResponseDTO>findAllByName(@PathVariable String name){
+        try{
+            List<ProductDTO> productDTOSList =  adminProductService.findProductByName(name);
+            if(productDTOSList!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "All Product", productDTOSList));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
 }

@@ -10,6 +10,7 @@ public interface AdminProductService {
      int saveProduct(ProductDTO productDTO) throws IOException;
 
      public List<ProductDTO> allProduct();
+     public List<ProductDTO> findProductByName(String name);
 
 
 }

@@ -46,4 +46,10 @@ public class AdminProductServiceImpl implements AdminProductService {
         return allProduct.stream().map(Product::getDto).collect(Collectors.toList());
       //  return modelMapper.map(allProduct,new TypeToken<List<ProductDTO>>(){}.getType());
     }
+
+    @Override
+    public List<ProductDTO> findProductByName(String name) {
+        List<Product> byNameContaining = productRepository.findByNameContaining(name);
+        return byNameContaining.stream().map(Product::getDto).collect(Collectors.toList());
+    }
 }

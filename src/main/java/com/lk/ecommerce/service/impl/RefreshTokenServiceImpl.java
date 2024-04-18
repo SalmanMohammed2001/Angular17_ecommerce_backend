@@ -5,6 +5,7 @@ import com.lk.ecommerce.entity.RefreshToken;
 import com.lk.ecommerce.entity.User;
 import com.lk.ecommerce.repo.RefreshTokenRepository;
 import com.lk.ecommerce.repo.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,12 @@ import java.util.UUID;
 
 
 @Service
+@RequiredArgsConstructor
 public class RefreshTokenServiceImpl {
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
-    @Autowired
-    private UserRepository userRepository;
+
+    private final RefreshTokenRepository refreshTokenRepository;
+
+    private final UserRepository userRepository;
     public String createRefreshToken(String email) {
         User user= userRepository.findByEmail(email);
         RefreshToken refreshToken=refreshTokenRepository.findByUid(user.getUid());
