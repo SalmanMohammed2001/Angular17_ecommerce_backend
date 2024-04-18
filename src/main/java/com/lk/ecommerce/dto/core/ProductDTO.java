@@ -25,9 +25,11 @@ public class ProductDTO {
 
     private String description;
 
-
     private byte[] byteImage;
 
     private UUID categoryId;
+
+    private String categoryName;
+
     private MultipartFile img;
 }
