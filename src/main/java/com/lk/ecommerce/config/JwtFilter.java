@@ -1,7 +1,7 @@
 package com.lk.ecommerce.config;
 
 
-import com.lk.ecommerce.service.impl.UserServiceImpl;
+import com.lk.ecommerce.service.auth.UserServiceImpl;
 import com.lk.ecommerce.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,16 +1,15 @@
-package com.lk.ecommerce.controller;
+package com.lk.ecommerce.controller.auth;
 
 import com.lk.ecommerce.dto.core.AuthDTO;
 import com.lk.ecommerce.dto.core.ResponseDTO;
 import com.lk.ecommerce.dto.core.UserDTO;
-import com.lk.ecommerce.service.UserService;
+import com.lk.ecommerce.service.auth.UserService;
 import com.lk.ecommerce.util.JwtUtil;
 import com.lk.ecommerce.util.VarList;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

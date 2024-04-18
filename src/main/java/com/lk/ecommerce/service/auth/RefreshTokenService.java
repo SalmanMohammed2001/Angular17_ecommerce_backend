@@ -1,4 +1,4 @@
-package com.lk.ecommerce.service;
+package com.lk.ecommerce.service.auth;
 
 /**
  * @TimeStamp 2024-02-14 16:34

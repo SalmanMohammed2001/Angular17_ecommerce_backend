@@ -1,12 +1,13 @@
-package com.lk.ecommerce.service.impl;
+package com.lk.ecommerce.service.auth;
 
 import com.lk.ecommerce.dto.core.UserDTO;
+import com.lk.ecommerce.entity.Orders;
 import com.lk.ecommerce.entity.User;
+import com.lk.ecommerce.eums.OrderStatus;
 import com.lk.ecommerce.eums.UserRoles;
+import com.lk.ecommerce.repo.OrderRepository;
 import com.lk.ecommerce.repo.UserRepository;
-import com.lk.ecommerce.service.UserService;
 import com.lk.ecommerce.util.VarList;
-import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +30,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    private final OrderRepository orderRepository;
+
+    public UserServiceImpl(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
 
 
     @Override
@@ -72,7 +79,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             //default role is DASH_ADMIN - because profile create against company
             userDTO.setRole(UserRoles.USER.name());
-            userRepository.save(modelMapper.map(userDTO, User.class));
+            User user = userRepository.save(modelMapper.map(userDTO, User.class));
+
+            Orders orders = new Orders();
+            orders.setAmount(0L);
+            orders.setTotalAmount(0L);
+            orders.setDiscount(0L);
+            orders.setUser(user);
+            orders.setOrderStatus(OrderStatus.PENDING);
+            orderRepository.save(orders);
             return VarList.Created;
         }
     }

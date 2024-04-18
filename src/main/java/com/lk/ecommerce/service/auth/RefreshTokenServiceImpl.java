@@ -1,4 +1,4 @@
-package com.lk.ecommerce.service.impl;
+package com.lk.ecommerce.service.auth;
 
 
 import com.lk.ecommerce.entity.RefreshToken;
@@ -6,7 +6,6 @@ import com.lk.ecommerce.entity.User;
 import com.lk.ecommerce.repo.RefreshTokenRepository;
 import com.lk.ecommerce.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;

@@ -1,4 +1,4 @@
-package com.lk.ecommerce.controller;
+package com.lk.ecommerce.controller.auth;
 
 
 import com.lk.ecommerce.dto.core.AuthDTO;
@@ -6,8 +6,8 @@ import com.lk.ecommerce.dto.core.RefreshTokenDTO;
 import com.lk.ecommerce.dto.core.ResponseDTO;
 import com.lk.ecommerce.dto.core.UserDTO;
 import com.lk.ecommerce.entity.RefreshToken;
-import com.lk.ecommerce.service.impl.RefreshTokenServiceImpl;
-import com.lk.ecommerce.service.impl.UserServiceImpl;
+import com.lk.ecommerce.service.auth.RefreshTokenServiceImpl;
+import com.lk.ecommerce.service.auth.UserServiceImpl;
 import com.lk.ecommerce.util.JwtUtil;
 import com.lk.ecommerce.util.VarList;
 import org.springframework.http.HttpStatus;

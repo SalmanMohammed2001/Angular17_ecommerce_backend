@@ -1,4 +1,4 @@
-package com.lk.ecommerce.service;
+package com.lk.ecommerce.service.auth;
 
 import com.lk.ecommerce.dto.core.UserDTO;
 

@@ -1,12 +1,8 @@
 package com.lk.ecommerce.controller.admin;
 
-import com.lk.ecommerce.dto.core.AuthDTO;
 import com.lk.ecommerce.dto.core.CategoryDTO;
 import com.lk.ecommerce.dto.core.ResponseDTO;
-import com.lk.ecommerce.dto.core.UserDTO;
-import com.lk.ecommerce.service.UserService;
 import com.lk.ecommerce.service.admin.category.CategoryService;
-import com.lk.ecommerce.util.JwtUtil;
 import com.lk.ecommerce.util.VarList;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
