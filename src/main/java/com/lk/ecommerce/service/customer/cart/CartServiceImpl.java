@@ -152,5 +152,35 @@ public class CartServiceImpl implements CartService {
         return  null;
     }
 
+    public OrderDTO decreaseProductQuantity(AddProductCartDTO addProductCartDTO){
+        Orders  activeOrder = orderRepository.findByUserUidAndOrderStatus(addProductCartDTO.getUserId(), OrderStatus.PENDING);
+        Optional<Product> optionalProduct = productRepository.findById(addProductCartDTO.getProductId());
+
+        Optional<CartItems> optionalCartItems = cartItemRepository.findByProductAndOrderIdAndUserId(addProductCartDTO.getProductId(), activeOrder.getId(), addProductCartDTO.getUserId());
+
+        if(optionalCartItems.isPresent() && optionalProduct.isPresent()){
+
+            CartItems cartItems = optionalCartItems.get();
+            Product product = optionalProduct.get();
+
+            activeOrder.setAmount(activeOrder.getAmount() - product.getPrice());
+            activeOrder.setTotalAmount(activeOrder.getTotalAmount() - product.getPrice());
+
+            cartItems.setQuantity(cartItems.getQuantity() - 1);
+
+            if (activeOrder.getCoupon() != null) {
+                double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.00) * activeOrder.getTotalAmount());
+                double netAmount = activeOrder.getAmount() - discountAmount;
+
+                activeOrder.setAmount((long) netAmount);
+                activeOrder.setDiscount((long) discountAmount);
+            }
+
+            cartItemRepository.save(cartItems);
+            orderRepository.save(activeOrder);
+            return activeOrder.getOrderDto();
+        }
+        return  null;
+    }
 
 }

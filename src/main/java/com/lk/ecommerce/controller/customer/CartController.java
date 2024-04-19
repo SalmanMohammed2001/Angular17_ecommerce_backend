@@ -99,4 +99,21 @@ public class CartController {
         }
     }
 
+    @PostMapping("/deduction")
+    public ResponseEntity<ResponseDTO>decreaseProductQuantity(@RequestBody AddProductCartDTO addProductCartDTO){
+        try{
+            OrderDTO orderDTO = cartService.decreaseProductQuantity(addProductCartDTO);
+            if(orderDTO!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "Product Increased", orderDTO));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
+
 }
