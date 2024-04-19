@@ -1,6 +1,8 @@
 package com.lk.ecommerce.service.customer.cart;
 
 import com.lk.ecommerce.dto.core.AddProductCartDTO;
+import com.lk.ecommerce.dto.core.CartItemDTO;
+import com.lk.ecommerce.dto.core.OrderDTO;
 import com.lk.ecommerce.entity.CartItems;
 import com.lk.ecommerce.entity.Orders;
 import com.lk.ecommerce.entity.Product;
@@ -15,7 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -59,7 +64,20 @@ public class CartServiceImpl implements CartService {
                 return VarList.Created;
             }
         }
-
         return 0;
+    }
+
+    @Override
+    public OrderDTO getCartByUserId(UUID userId) {
+        Orders activeOrder = orderRepository.findByUserUidAndOrderStatus(userId, OrderStatus.PENDING);
+        List<CartItemDTO> cartItemDTOS =  activeOrder.getCardItem().stream().map(CartItems::getCartDto).collect(Collectors.toList());
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setAmount(activeOrder.getAmount());
+        orderDTO.setId(activeOrder.getId());
+        orderDTO.setOrderStatus(activeOrder.getOrderStatus());
+        orderDTO.setDiscount(activeOrder.getDiscount());
+        orderDTO.setTotalAmount(activeOrder.getTotalAmount());
+        orderDTO.setCardItem(cartItemDTOS);
+        return orderDTO;
     }
 }

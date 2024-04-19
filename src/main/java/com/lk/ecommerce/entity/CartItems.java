@@ -1,5 +1,6 @@
 package com.lk.ecommerce.entity;
 
+import com.lk.ecommerce.dto.core.CartItemDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,5 +40,16 @@ public class CartItems {
     @JoinColumn(name = "order_id")
     private Orders orders;
 
+    public CartItemDTO getCartDto(){
+        CartItemDTO cartItemDto = new CartItemDTO();
+        cartItemDto.setId(id);
+        cartItemDto.setPrice(price);
+        cartItemDto.setProduct(product.getId());
+        cartItemDto.setQuantity(quantity);
+        cartItemDto.setUser(user.getUid());
+        cartItemDto.setProductName(product.getName());
+        cartItemDto.setReturnImg(product.getImg());
+        return cartItemDto;
+    }
 
 }

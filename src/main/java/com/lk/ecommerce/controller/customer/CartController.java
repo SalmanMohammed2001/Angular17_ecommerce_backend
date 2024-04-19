@@ -1,9 +1,6 @@
 package com.lk.ecommerce.controller.customer;
 
-import com.lk.ecommerce.dto.core.AddProductCartDTO;
-import com.lk.ecommerce.dto.core.CategoryDTO;
-import com.lk.ecommerce.dto.core.ProductDTO;
-import com.lk.ecommerce.dto.core.ResponseDTO;
+import com.lk.ecommerce.dto.core.*;
 import com.lk.ecommerce.service.customer.CustomerProductService;
 import com.lk.ecommerce.service.customer.cart.CartService;
 import com.lk.ecommerce.util.VarList;
@@ -14,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/cart")
@@ -49,7 +47,23 @@ public class CartController {
         }
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<ResponseDTO>getCardByUserId(@PathVariable UUID userId){
+        try{
+            OrderDTO orderDTO = cartService.getCartByUserId(userId);
+            if(orderDTO!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "Cart By User", orderDTO));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+            }
 
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
 
 
 }

@@ -12,7 +12,7 @@ import java.util.UUID;
 public class CartItemDTO {
 
 
-    private UUID id;
+    private Long id;
 
     private Long price;
 
@@ -26,7 +26,6 @@ public class CartItemDTO {
     private String productName;
 
     private byte[] returnImg;
-
 
     private UUID user;
 
