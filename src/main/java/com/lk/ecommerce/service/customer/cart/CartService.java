@@ -2,6 +2,7 @@ package com.lk.ecommerce.service.customer.cart;
 
 import com.lk.ecommerce.dto.core.AddProductCartDTO;
 import com.lk.ecommerce.dto.core.OrderDTO;
+import com.lk.ecommerce.dto.core.PlaceOrderDTO;
 
 import java.util.UUID;
 
@@ -14,4 +15,6 @@ public interface CartService {
 
     public OrderDTO increaseProductQuantity(AddProductCartDTO addProductCartDTO);
     public OrderDTO decreaseProductQuantity(AddProductCartDTO addProductCartDTO);
+
+    public OrderDTO placeOrder(PlaceOrderDTO placeOrderDto);
 }

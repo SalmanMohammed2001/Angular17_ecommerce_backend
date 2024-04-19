@@ -3,6 +3,7 @@ package com.lk.ecommerce.service.customer.cart;
 import com.lk.ecommerce.dto.core.AddProductCartDTO;
 import com.lk.ecommerce.dto.core.CartItemDTO;
 import com.lk.ecommerce.dto.core.OrderDTO;
+import com.lk.ecommerce.dto.core.PlaceOrderDTO;
 import com.lk.ecommerce.entity.*;
 import com.lk.ecommerce.eums.CouponActiveState;
 import com.lk.ecommerce.eums.OrderStatus;
@@ -179,6 +180,32 @@ public class CartServiceImpl implements CartService {
             cartItemRepository.save(cartItems);
             orderRepository.save(activeOrder);
             return activeOrder.getOrderDto();
+        }
+        return  null;
+    }
+
+    @Override
+    public OrderDTO placeOrder(PlaceOrderDTO placeOrderDto) {
+        Orders activateOrder = orderRepository.findByUserUidAndOrderStatus(placeOrderDto.getUserId(), OrderStatus.PENDING);
+        Optional<User> optionalUser = userRepository.findById(placeOrderDto.getUserId());
+
+        if (optionalUser.isPresent()){
+            activateOrder.setOrderDescription(placeOrderDto.getOrderDescription());
+            activateOrder.setAddress(placeOrderDto.getAddress());
+            activateOrder.setDate(new Date());
+            activateOrder.setOrderStatus(OrderStatus.PLACED);
+            activateOrder.setTrackingId(UUID.randomUUID());
+            orderRepository.save(activateOrder);
+
+            Orders orders = new Orders();
+            orders.setAmount(0L);
+            orders.setTotalAmount(0L);
+            orders.setDiscount(0L);
+            orders.setUser(optionalUser.get());
+            orders.setOrderStatus(OrderStatus.PENDING);
+            orderRepository.save(orders);
+
+            return activateOrder.getOrderDto();
         }
         return  null;
     }

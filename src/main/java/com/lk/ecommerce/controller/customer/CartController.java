@@ -116,4 +116,22 @@ public class CartController {
         }
     }
 
+    @PostMapping("/placeOrder")
+    public ResponseEntity<ResponseDTO>placeOrder(@RequestBody PlaceOrderDTO placeOrderDTO){
+        try{
+            OrderDTO orderDTO = cartService.placeOrder(placeOrderDTO);
+            if(orderDTO!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "Order Placed", orderDTO));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
+
+
 }
