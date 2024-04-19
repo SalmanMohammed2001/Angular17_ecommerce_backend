@@ -32,9 +32,11 @@ public class CartServiceImpl implements CartService {
 
     public int addToProductCart(AddProductCartDTO addProductCartDTO) {
         Orders activeOrder = orderRepository.findByUserUidAndOrderStatus(addProductCartDTO.getUserId(), OrderStatus.PENDING);
-        Optional<CartItems> optionalCardItem = cartItemRepository.findByProductAndOrderIdAndUserId(addProductCartDTO.getProductId(), activeOrder.getId(), addProductCartDTO.getUserId());
+        Optional<CartItems> optionalCardItem = cartItemRepository.findByProductAndOrderIdAndUserId(addProductCartDTO.getProductId()
+                , activeOrder.getId(), addProductCartDTO.getUserId());
 
         if (optionalCardItem.isPresent()) {
+            System.out.println("salmannnnnnnnnnnnnnnnnnnnnnnnn");
             return VarList.Not_Acceptable;
         } else {
             Optional<User> optionUser = userRepository.findById(addProductCartDTO.getUserId());
