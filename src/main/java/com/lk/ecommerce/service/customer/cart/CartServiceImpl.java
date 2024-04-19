@@ -3,20 +3,17 @@ package com.lk.ecommerce.service.customer.cart;
 import com.lk.ecommerce.dto.core.AddProductCartDTO;
 import com.lk.ecommerce.dto.core.CartItemDTO;
 import com.lk.ecommerce.dto.core.OrderDTO;
-import com.lk.ecommerce.entity.CartItems;
-import com.lk.ecommerce.entity.Orders;
-import com.lk.ecommerce.entity.Product;
-import com.lk.ecommerce.entity.User;
+import com.lk.ecommerce.entity.*;
+import com.lk.ecommerce.eums.CouponActiveState;
 import com.lk.ecommerce.eums.OrderStatus;
-import com.lk.ecommerce.repo.CartItemRepository;
-import com.lk.ecommerce.repo.OrderRepository;
-import com.lk.ecommerce.repo.ProductRepository;
-import com.lk.ecommerce.repo.UserRepository;
+import com.lk.ecommerce.exception.ValidationException;
+import com.lk.ecommerce.repo.*;
 import com.lk.ecommerce.util.VarList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,6 +31,8 @@ public class CartServiceImpl implements CartService {
     private final OrderRepository orderRepository;
 
     private final CartItemRepository cartItemRepository;
+
+    private final CouponRepository couponRepository;
 
     public int addToProductCart(AddProductCartDTO addProductCartDTO) {
         Orders activeOrder = orderRepository.findByUserUidAndOrderStatus(addProductCartDTO.getUserId(), OrderStatus.PENDING);
@@ -78,6 +77,80 @@ public class CartServiceImpl implements CartService {
         orderDTO.setDiscount(activeOrder.getDiscount());
         orderDTO.setTotalAmount(activeOrder.getTotalAmount());
         orderDTO.setCardItem(cartItemDTOS);
+        if(activeOrder.getCoupon()!=null){
+            orderDTO.setCouponName(activeOrder.getOrderDto().getCouponName());
+        }
         return orderDTO;
     }
+
+    @Override
+    public OrderDTO applyCoupon(UUID userId, String code) {
+        Orders activeOrder = orderRepository.findByUserUidAndOrderStatus(userId, OrderStatus.PENDING);
+        Coupon coupon = couponRepository.findByCode(code).orElseThrow(() -> new ValidationException("Coupon Not Found"));
+
+        System.out.println(coupon.getActiveState());
+
+        if (coupon.getActiveState()== CouponActiveState.DEACTIVATE){
+            if(couponExpired(coupon)){
+                throw new ValidationException("Coupon has expired");
+            }
+
+            double discountAmount=(coupon.getDiscount() /100.00) * activeOrder.getTotalAmount();
+            double netAmount=activeOrder.getAmount()-discountAmount;
+
+            System.out.println(discountAmount);
+            activeOrder.setAmount((long) netAmount);
+            activeOrder.setDiscount((long) discountAmount);
+            activeOrder.setCoupon(coupon);
+            coupon.setActiveState(CouponActiveState.ACTIVE);
+            couponRepository.save(coupon);
+
+            orderRepository.save(activeOrder);
+            return activeOrder.getOrderDto();
+        }else {
+            throw new ValidationException("Coupon Already User");
+        }
+
+
+    }
+
+    private boolean couponExpired(Coupon coupon){
+        Date currentDate=new Date();
+        Date expirationDate = coupon.getExpirationDate();
+        return expirationDate != null && currentDate.after(expirationDate);
+    }
+
+
+    public OrderDTO increaseProductQuantity(AddProductCartDTO addProductCartDTO){
+        Orders  activeOrder = orderRepository.findByUserUidAndOrderStatus(addProductCartDTO.getUserId(), OrderStatus.PENDING);
+        Optional<Product> optionalProduct = productRepository.findById(addProductCartDTO.getProductId());
+
+        Optional<CartItems> optionalCartItems = cartItemRepository.findByProductAndOrderIdAndUserId(addProductCartDTO.getProductId(), activeOrder.getId(), addProductCartDTO.getUserId());
+
+        if(optionalCartItems.isPresent() && optionalProduct.isPresent()){
+
+            CartItems cartItems = optionalCartItems.get();
+            Product product = optionalProduct.get();
+
+            activeOrder.setAmount(activeOrder.getAmount()+ product.getPrice());
+            activeOrder.setTotalAmount(activeOrder.getTotalAmount() + product.getPrice());
+
+            cartItems.setQuantity(cartItems.getQuantity() + 1);
+
+            if(activeOrder.getCoupon() !=null){
+                double discountAmount=(activeOrder.getCoupon().getDiscount() /100.00) * activeOrder.getTotalAmount();
+                double netAmount=activeOrder.getAmount()-discountAmount;
+
+                activeOrder.setAmount((long) netAmount);
+                activeOrder.setDiscount((long) discountAmount);
+            }
+
+            cartItemRepository.save(cartItems);
+            orderRepository.save(activeOrder);
+            return activeOrder.getOrderDto();
+        }
+        return  null;
+    }
+
+
 }

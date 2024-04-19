@@ -2,6 +2,7 @@ package com.lk.ecommerce.service.admin.coupn;
 
 import com.lk.ecommerce.dto.core.CouponDTO;
 import com.lk.ecommerce.entity.Coupon;
+import com.lk.ecommerce.eums.CouponActiveState;
 import com.lk.ecommerce.repo.CouponRepository;
 import com.lk.ecommerce.util.VarList;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,9 @@ public class CouponServiceImpl implements CouponService {
         if(couponRepository.existsByCode(dto.getCode())){
           return   VarList.Not_Acceptable;
         }
-        couponRepository.save(modelMapper.map(dto, Coupon.class));
+        Coupon coupon = modelMapper.map(dto, Coupon.class);
+        coupon.setActiveState(CouponActiveState.DEACTIVATE);
+        couponRepository.save(coupon);
         return VarList.Created;
     }
 

@@ -30,7 +30,7 @@ public class OrderDTO {
     private String userName;
     private List<CartItemDTO> cardItem;
 
-
+    private String couponName;
 
 
 

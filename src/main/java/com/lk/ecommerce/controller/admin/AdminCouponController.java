@@ -26,9 +26,7 @@ public class AdminCouponController {
     private final CouponService couponService;
 
 
-    @PostMapping()
-
-
+    @PostMapping("/save")
     public ResponseEntity<ResponseDTO> saveCategory(@RequestBody @Valid CouponDTO couponDTO) {
         try {
             int res = couponService.createCoupon(couponDTO);

@@ -9,4 +9,8 @@ public interface CartService {
     public int addToProductCart(AddProductCartDTO addProductCartDTO);
 
     public OrderDTO getCartByUserId(UUID userId);
+
+    public OrderDTO applyCoupon(UUID userId, String code);
+
+    public OrderDTO increaseProductQuantity(AddProductCartDTO addProductCartDTO);
 }

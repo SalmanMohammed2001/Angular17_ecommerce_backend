@@ -65,5 +65,38 @@ public class CartController {
         }
     }
 
+    @GetMapping("coupon/{userId}/{code}")
+    public ResponseEntity<ResponseDTO>applyCoupon(@PathVariable UUID userId,@PathVariable String code){
+        try{
+            OrderDTO orderDTO = cartService.applyCoupon(userId,code);
+            if(orderDTO!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "Apply Coupon", orderDTO));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Coupon Already Exists", null));
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
+
+    @PostMapping("/addition")
+    public ResponseEntity<ResponseDTO>increaseProductQuantity(@RequestBody AddProductCartDTO addProductCartDTO){
+        try{
+            OrderDTO orderDTO = cartService.increaseProductQuantity(addProductCartDTO);
+            if(orderDTO!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "Product Increased", orderDTO));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
 
 }

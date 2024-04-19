@@ -1,5 +1,6 @@
 package com.lk.ecommerce.entity;
 
+import com.lk.ecommerce.eums.CouponActiveState;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,5 +32,9 @@ public class Coupon {
     private Long discount;
 
     private Date expirationDate;
+
+    private CouponActiveState activeState;
+
+
 
 }
