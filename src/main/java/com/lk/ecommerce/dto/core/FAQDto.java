@@ -11,9 +11,7 @@ import java.util.UUID;
 @Data
 public class FAQDto {
     private UUID id;
-
     private String question;
     private String answer;
-
     private UUID productId;
 }

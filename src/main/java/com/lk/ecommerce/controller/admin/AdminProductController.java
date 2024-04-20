@@ -1,9 +1,11 @@
 package com.lk.ecommerce.controller.admin;
 
 import com.lk.ecommerce.dto.core.CategoryDTO;
+import com.lk.ecommerce.dto.core.FAQDto;
 import com.lk.ecommerce.dto.core.ProductDTO;
 import com.lk.ecommerce.dto.core.ResponseDTO;
 import com.lk.ecommerce.service.admin.category.CategoryService;
+import com.lk.ecommerce.service.admin.faq.FAQService;
 import com.lk.ecommerce.service.admin.product.AdminProductService;
 import com.lk.ecommerce.util.VarList;
 import jakarta.validation.Valid;
@@ -24,6 +26,8 @@ public class AdminProductController {
 
 
     private final AdminProductService adminProductService;
+
+    private final FAQService faqService;
 
     //constructor injection
 
@@ -103,4 +107,24 @@ public class AdminProductController {
                     .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
         }
     }
+
+    @PostMapping("/postFaq/{productId}")
+    public ResponseEntity<ResponseDTO>postFaq(@PathVariable UUID productId, @RequestBody FAQDto faqDto){
+        try{
+            FAQDto postedFAQ = faqService.postFAQ(productId, faqDto);
+            if(postedFAQ!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "All Product", postedFAQ));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
+
+
 }
