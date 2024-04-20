@@ -210,4 +210,10 @@ public class CartServiceImpl implements CartService {
         return  null;
     }
 
+    @Override
+    public List<OrderDTO> getMyPlaceOrders(UUID userId) {
+      return   orderRepository.findByUserUidAndOrderStatusIn(userId,List.of(OrderStatus.PLACED,OrderStatus.DELIVER))
+              .stream().map(Orders::getOrderDto).collect(Collectors.toList());
+    }
+
 }

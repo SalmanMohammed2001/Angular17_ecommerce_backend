@@ -133,5 +133,22 @@ public class CartController {
         }
     }
 
+    @GetMapping("/myOrders/{userId}")
+    public ResponseEntity<ResponseDTO>getMyPlaceOrder(@PathVariable UUID userId){
+        try{
+            List<OrderDTO> myPlaceOrders = cartService.getMyPlaceOrders(userId);
+            if(myPlaceOrders!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "Al My Orders", myPlaceOrders));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+            }
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
+
 
 }

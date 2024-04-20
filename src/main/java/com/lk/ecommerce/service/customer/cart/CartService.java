@@ -4,6 +4,7 @@ import com.lk.ecommerce.dto.core.AddProductCartDTO;
 import com.lk.ecommerce.dto.core.OrderDTO;
 import com.lk.ecommerce.dto.core.PlaceOrderDTO;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface CartService {
@@ -17,4 +18,6 @@ public interface CartService {
     public OrderDTO decreaseProductQuantity(AddProductCartDTO addProductCartDTO);
 
     public OrderDTO placeOrder(PlaceOrderDTO placeOrderDto);
+
+    public List<OrderDTO> getMyPlaceOrders(UUID userId);
 }
