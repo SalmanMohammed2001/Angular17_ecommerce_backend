@@ -49,6 +49,8 @@ public class Orders {
         OrderDTO orderDto = new OrderDTO();
         orderDto.setId(id);
         orderDto.setOrderDescription(orderDescription);
+        orderDto.setTotalAmount(totalAmount);
+        orderDto.setDiscount(discount);
         orderDto.setAddress(address);
         orderDto.setTrackingId(trackingId);
         orderDto.setAmount(amount);
