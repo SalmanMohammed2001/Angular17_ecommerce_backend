@@ -144,7 +144,7 @@ public class AdminProductController {
         }
     }
 
-    @PostMapping("/update/{productId}")
+    @PutMapping("/update/{productId}")
     public ResponseEntity<ResponseDTO>update(@PathVariable UUID productId, @ModelAttribute ProductDTO productDTO){
         try{
             ProductDTO product = adminProductService.updateProduct(productId,productDTO);
