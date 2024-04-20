@@ -126,5 +126,41 @@ public class AdminProductController {
         }
     }
 
+    @GetMapping("/find/{productId}")
+    public ResponseEntity<ResponseDTO>findProductById(@PathVariable UUID productId){
+        try{
+            ProductDTO productDTOSList =  adminProductService.getProductDto(productId);
+            if(productDTOSList!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, " Product", productDTOSList));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
+
+    @PostMapping("/update/{productId}")
+    public ResponseEntity<ResponseDTO>update(@PathVariable UUID productId, @ModelAttribute ProductDTO productDTO){
+        try{
+            ProductDTO product = adminProductService.updateProduct(productId,productDTO);
+            if(product!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, " Product update ", product));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
+
 
 }

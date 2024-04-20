@@ -15,5 +15,9 @@ public interface AdminProductService {
 
      public int delete(UUID uuid);
 
+     public ProductDTO getProductDto(UUID productId);
+
+     public ProductDTO updateProduct(UUID productId,ProductDTO productDto) throws IOException;
+
 
 }

@@ -65,4 +65,33 @@ public class AdminProductServiceImpl implements AdminProductService {
             return VarList.Not_Acceptable;
         }
     }
+
+
+    public ProductDTO getProductDto(UUID productId){
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        return optionalProduct.map(Product::getDto).orElse(null);
+    }
+
+
+    public ProductDTO updateProduct(UUID productId,ProductDTO productDto) throws IOException {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        Optional<Category> optionalCategory = categoryRepository.findById(productDto.getCategoryId());
+        if(optionalProduct.isPresent() && optionalCategory.isPresent()){
+
+            Product product = optionalProduct.get();
+            product.setName(productDto.getName());
+            product.setDescription(productDto.getDescription());
+            product.setPrice(productDto.getPrice());
+            //  product.setImg(productDto.getImg().getBytes());
+            product.setCategory(optionalCategory.get());
+            if(productDto.getImg() !=null){
+                product.setImg(productDto.getImg().getBytes());
+            }
+            return productRepository.save(product).getDto();
+        }else {
+            return  null;
+        }
+    }
+
+
 }
