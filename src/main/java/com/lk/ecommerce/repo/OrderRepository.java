@@ -18,6 +18,6 @@ public interface OrderRepository extends JpaRepository<Orders, UUID> {
 
     List<Orders> findByUserUidAndOrderStatusIn(UUID userId, List<OrderStatus> orderStatus);
 
-
+    Orders findByTrackingId(UUID id);
 
 }

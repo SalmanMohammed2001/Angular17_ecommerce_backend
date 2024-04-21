@@ -216,5 +216,8 @@ public class CartServiceImpl implements CartService {
               .stream().map(Orders::getOrderDto).collect(Collectors.toList());
     }
 
+    public OrderDTO searchByTrackingId(UUID trackingId){
+     return  orderRepository.findByTrackingId(trackingId).getOrderDto();
+    }
 
 }

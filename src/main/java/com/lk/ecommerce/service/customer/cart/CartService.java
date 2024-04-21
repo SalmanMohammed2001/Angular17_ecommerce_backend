@@ -20,4 +20,6 @@ public interface CartService {
     public OrderDTO placeOrder(PlaceOrderDTO placeOrderDto);
 
     public List<OrderDTO> getMyPlaceOrders(UUID userId);
+
+    public OrderDTO searchByTrackingId(UUID trackingId);
 }
