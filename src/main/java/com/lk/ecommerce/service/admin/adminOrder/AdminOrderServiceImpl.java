@@ -1,5 +1,6 @@
 package com.lk.ecommerce.service.admin.adminOrder;
 
+import com.lk.ecommerce.dto.core.AnalyticsResponse;
 import com.lk.ecommerce.dto.core.OrderDTO;
 import com.lk.ecommerce.entity.Orders;
 import com.lk.ecommerce.eums.OrderStatus;
@@ -9,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -62,4 +64,76 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         }
         return null;
     }
+
+    public AnalyticsResponse calculateAnalytics(){
+        LocalDate currentDate = LocalDate.now();
+        LocalDate previousMonth = currentDate.minusMonths(1);
+
+        Long currentMonthOrder=getTotalOrdersForMonth(currentDate.getMonthValue(),currentDate.getYear());
+        Long previousMonthOrder=getTotalOrdersForMonth(previousMonth.getMonthValue(),previousMonth.getYear());
+        Long currentMonthEarnings=getTotalEraningForMonth(currentDate.getMonthValue(),currentDate.getYear());
+        Long previousMonthEarnings=getTotalEraningForMonth(previousMonth.getMonthValue(),previousMonth.getYear());
+
+        Long place=orderRepository.countByOrderStatus(OrderStatus.PLACED);
+        Long shipped=orderRepository.countByOrderStatus(OrderStatus.SHIPPED);
+        Long delivered=orderRepository.countByOrderStatus(OrderStatus.DELIVER);
+
+        return  new AnalyticsResponse(
+                place,shipped,delivered,currentMonthOrder,previousMonthOrder,currentMonthEarnings,previousMonthEarnings
+        );
+    }
+
+    private Long getTotalEraningForMonth(int month, int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH,month-1);
+        calendar.set(Calendar.DAY_OF_MONTH,1);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+
+        Date startOfMonth = calendar.getTime();
+
+        calendar.set(Calendar.DAY_OF_MONTH,calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        calendar.set(Calendar.HOUR_OF_DAY,23);
+        calendar.set(Calendar.MINUTE,59);
+        calendar.set(Calendar.SECOND,59);
+
+        Date endMonth = calendar.getTime();
+
+        List<Orders> orders=orderRepository.findByDateBetweenAndOrderStatus(startOfMonth,endMonth,OrderStatus.DELIVER);
+
+        Long sum=0L;
+        for(Orders order:orders){
+            sum+=order.getAmount();
+        }
+        return  sum;
+
+    }
+
+    private Long getTotalOrdersForMonth(int month, int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH,month-1);
+        calendar.set(Calendar.DAY_OF_MONTH,1);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+
+        Date startOfMonth = calendar.getTime();
+
+        calendar.set(Calendar.DAY_OF_MONTH,calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        calendar.set(Calendar.HOUR_OF_DAY,23);
+        calendar.set(Calendar.MINUTE,59);
+        calendar.set(Calendar.SECOND,59);
+
+        Date endMonth = calendar.getTime();
+
+        List<Orders> orders=orderRepository.findByDateBetweenAndOrderStatus(startOfMonth,endMonth,OrderStatus.DELIVER);
+
+        return (long) orders.size();
+
+
+    }
 }
+

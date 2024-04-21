@@ -1,5 +1,6 @@
 package com.lk.ecommerce.controller.admin;
 
+import com.lk.ecommerce.dto.core.AnalyticsResponse;
 import com.lk.ecommerce.dto.core.OrderDTO;
 import com.lk.ecommerce.dto.core.ProductDTO;
 import com.lk.ecommerce.dto.core.ResponseDTO;
@@ -64,6 +65,23 @@ public class AdminOrderController {
         }
     }
 
+    @GetMapping("/order/analytics")
+    public ResponseEntity<ResponseDTO>getAnalytics(){
+        try{
+            AnalyticsResponse analyticsResponse = adminOrderService.calculateAnalytics();
+            if(analyticsResponse!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "All Place Order", analyticsResponse));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
 
 
 }
