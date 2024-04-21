@@ -1,5 +1,6 @@
 package com.lk.ecommerce.entity;
 
+import com.lk.ecommerce.dto.core.ReviewDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,17 +43,17 @@ public class Review {
     private Product product;
 
 
- /*   public ReviewDto getDto(){
+    public ReviewDto getDto(){
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setId(id);
         reviewDto.setRating(rating);
         reviewDto.setDescription(description);
         reviewDto.setReturnImg(img);
         reviewDto.setProductId(product.getId());
-        reviewDto.setUserId(user.getUserId());
-        reviewDto.setUsername(user.getUsername());
+        reviewDto.setUserId(user.getUid());
+        reviewDto.setUsername(user.getName());
 
         return reviewDto;
-    }*/
+    }
 
 }

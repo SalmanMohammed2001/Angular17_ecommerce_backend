@@ -12,9 +12,7 @@ import java.util.UUID;
 @Data
 public class ReviewDto {
 
-
-
-    private UUID id;
+    private Long id;
 
     private Long rating;
 

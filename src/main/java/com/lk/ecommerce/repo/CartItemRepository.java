@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,4 +16,7 @@ public interface CartItemRepository extends JpaRepository<CartItems, UUID> {
 
     @Query(value = "SELECT * FROM cart_items WHERE product_id=?  AND order_id=? AND user_id=?",nativeQuery = true)
     Optional<CartItems> findByProductAndOrderIdAndUserId(UUID productId,UUID orderId,UUID userId);
+
+    @Query(value = "SELECT * FROM cart_items WHERE  order_id=? ",nativeQuery = true)
+    List<CartItems> findByOrderId(UUID orderId);
 }
