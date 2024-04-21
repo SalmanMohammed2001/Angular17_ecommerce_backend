@@ -1,6 +1,7 @@
 package com.lk.ecommerce.controller.customer;
 
 import com.lk.ecommerce.dto.core.ProductDTO;
+import com.lk.ecommerce.dto.core.ProductDetailsDto;
 import com.lk.ecommerce.dto.core.ResponseDTO;
 import com.lk.ecommerce.service.admin.product.AdminProductService;
 import com.lk.ecommerce.service.customer.CustomerProductService;
@@ -52,6 +53,24 @@ public class CustomerProductController {
             if(productDTOSList!=null){
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseDTO(VarList.OK, "All Product", productDTOSList));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+            }
+
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+        }
+    }
+
+    @GetMapping("product/{id}")
+    public ResponseEntity<ResponseDTO>getProductDetailsById(@PathVariable UUID id){
+        try{
+            ProductDetailsDto productDetailsDto = customerProductService.productDetailsDto(id);
+            if(productDetailsDto!=null){
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "All Product", productDetailsDto));
             }else {
                 return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
                         .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
